@@ -1,23 +1,68 @@
-// У файлі render - functions.js створи екземпляр SimpleLightbox для роботи
-//  з модальним вікном та зберігай функції для відображення елементів
-// інтерфейсу:
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
 
-function createGallery(images) {}
-// Ця функція повинна приймати масив images, створювати HTML - розмітку
-// для галереї, додавати її в контейнер галереї та викликати метод
-// екземпляра SimpleLightbox refresh().Нічого не повертає.
+const loader = document.querySelector('.loader');
+const gallery = document.querySelector('.gallery');
 
-function clearGallery() {}
-// Ця функція нічого не приймає та повинна очищати вміст контейнера
-// галереї.Нічого не повертає.
+let simplelightbox = new SimpleLightbox('.gallery-link', {
+  captionsData: 'alt',
+  captionPosition: 'bottom',
+  captionDelay: 250,
+});
 
-function showLoader() {}
-// Ця функція нічого не приймає, повинна додавати клас для відображення
-// лоадера.Нічого не повертає.
+function createGallery(images) {
+  const markup = images
+    .map(
+      ({
+        webformatURL,
+        largeImageURL,
+        tags,
+        likes,
+        views,
+        comments,
+        downloads,
+      }) => `<li class="gallery-item">
+      <a class="gallery-link" href=${largeImageURL}>
+      <div class="image-container">
+        <img class="gallery-image" src="${webformatURL}" alt="${tags}" />
+        </div>
+        <div class="image-inform">
+          <div>
+            <h3 class="image-inform-title">Likes</h3>
+            <span class="image-inform-text">${likes}</span>
+          </div>
+          <div>
+            <h3 class="image-inform-title">Views</h3>
+            <span class="image-inform-text">${views}</span>
+          </div>
+          <div>
+            <h3 class="image-inform-title">Comments</h3>
+            <span class="image-inform-text">${comments}</span>
+          </div>
+          <div>
+            <h3 class="image-inform-title">Downloads</h3>
+            <span class="image-inform-text">${downloads}</span>
+          </div>
+        </div>
+      </a>
+    </li>`
+    )
+    .join('');
 
-function hideLoader() {}
+  gallery.innerHTML = markup;
+  simplelightbox.refresh();
+}
 
-// Ця функція нічого не приймає, повинна прибирати клас для відображення
-// лоадера.Нічого не повертає.
+function clearGallery() {
+  gallery.innerHTML = '';
+}
+
+function showLoader() {
+  loader.classList.remove('hidden');
+}
+
+function hideLoader() {
+  loader.classList.add('hidden');
+}
 
 export { createGallery, clearGallery, showLoader, hideLoader };
